@@ -1,0 +1,72 @@
+# 인터넷
+
+인터넷이란 Data를 전달하는 장치들이 이루는 거대한 network 망을 의미
+
+## 인터넷 구성
+
+인터넷은 여러 형태의 network와 그 안에 sub-network로 구성 
+network는 다양한 entity인 Network Edge, Access network, Network Core로 이루어짐
+
+### Network Edge
+
+Network Edge란 끝에 있는 entity를 의미하며 End System으로 구성 
+대표적인 End System으로는 web browser, email client, 스마트폰 그리고 앞으로 개발할 server
+
+### Access Network
+
+Access Network란 End system이 Internet의 첫 부분과 연결되는 구간으로 
+대표적으로 우리가 인터넷에 접속할 때 사용하는 랜선, 와이파이
+
+### Network Core
+
+Network Core란 Network의 핵심 부분으로 End system의 정보를 실어 나르는 역할을 합니다. 대표적으로 router
+
+### Packet(=Datagram)
+
+Packet은 인터넷상에서 장치들이 서로 통신할 때 전송하는 데이터 조각
+
+간단하게 설명하자면 상대에게 전송할 데이터가 담긴 것
+
+### IP
+
+IP란 Internet Protocol의 약자로 인터넷상에서 유일하게 상대를 식별할 수 있는 수단(간단하게 말하자면 인터넷상의 주소)
+
+클라이언트(end system)는 요청을 보낼 때 패킷에 IP 주소를 담고 Access Network를 통해 Network core로 보냄
+
+패킷을 받은 router는 자신의 Network Layer에서 패킷 안에 있는 IP를 확인 후 
+더 알맞은 위치의 router로 보내게 되고 그렇게 최종적으로 Network Edge에 도착하면 
+Network Layer에서 패킷을 확인 후 
+도착지의 IP가 자신의 IP가 옳다면 Transport Layer로 올리고 아니라면 다른 곳으로 보냄
+
+패킷이 이동을 한다면 다른 기기의 정보를 알 수 없기 때문에 여러 가지 문제점 야기 가능
+
+1. **만약 상대의 컴퓨터가 꺼져있다면?**
+2. **만약 중간에 패킷이 소실이 된다면?**
+3. **뒤에 보낸 패킷이 먼저 도착한다면?**
+4. **컴퓨터에 프로그램이 여러 개가 켜져 있다면?**
+
+이를 해결하기 위해서는 PORT와 TCP, UDP가 필요
+
+TCP란 Transmission Control Protocol(전송 제어 프로토콜)의 약자
+연결 보증을 해줌으로써 위의 1, 2, 3번 문제를 해결
+
+### 3 way-handshake
+클라이언트는 받는 곳에게 syn을 쏘고 그것을 받은 상대방은 받을 수 있는 상태라는 ack와 
+보내는 쪽도 받는 것이 가능한가를 물어보는 syn를 보냄 
+클라이언트가 syn을 받고 온전한 상태라는 ack를 보내게 되면 3 way-handshake가 완성이 되며 
+서로 받을 수 있는 상태라는 것이 보증 
+(syn와 ack는 서로의 상태가 괜찮은 지를 묻고 답하는 거라고 생각)
+
+2번 문제 -> 받았음을 알려줌으로써 이를 해결
+3번 문제 -> 도착한 패킷의 sequence number를 분석해서 만약 순서가 이상 하다면 다시 보내달라고 하여서 문제를 해결
+
+UDP란 User Datagram Protocol(사용자 데이터그램 프로토콜)
+-> 데이터가 맞는 지만 확인만 추가한 프로토콜
+신뢰성 떨어지지만 그만큼 빠르다는 장점
+
+전체적인 흐름을 요약하자면 
+클라이언트가 서버에게 3 way handshake를 보내고 연결이 되면 
+패킷에 데이터와 IP, PORT 등 여러 정보를 넣어서 Access Network를 통해 인터넷망으로 보냄
+그 후 Network Core로 들어가면 router의 network Layer에서 패킷의 IP 주소를 보고 다음 router로 보내고 
+마침내 Network Edge에 도달하게 되면 Physical Layer, Data Link Layer를 거쳐서 Network Layer에서 
+IP를 확인 후 옳다면 Transport Layer에서 PORT 번호를 확인 후 알맞은 애플리케이션으로 보내서 처리
